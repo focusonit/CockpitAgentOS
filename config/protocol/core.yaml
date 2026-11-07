@@ -1,0 +1,262 @@
+# 车端领域工具的协议定义（唯一来源）。
+#
+# 由它生成：给 LLM 的 function schema、执行器路由表、调试面板控件。
+# 每条指令都要在 backend/vehicle/devices/ 里有同名处理函数，测试会检查。
+# 只登记、不改专门状态的长尾指令放在 longtail.yaml。
+#
+# 参数类型：
+#   area   座位或区域：主驾、副驾、左后排、右后排、前排、后排、左侧、右侧、所有。不填时取说话人的座位
+#   enum   取值见 values
+#   int    整数，带 min / max
+#   level  档位：0–3 的数字，或 关/低/中/高
+#   str    自由文本
+
+params:
+  Position: {type: area, desc: 位置}
+  Area: {type: area, desc: 区域}
+  Number: {type: int, desc: 数值}
+  Direction: {type: enum, values: [调高, 调低, 前, 后, 上, 下, 左, 右, 放平, 直立], desc: 调节方向}
+
+tools:
+  body:
+    desc: 车身控制：车窗、天窗、遮阳帘、尾门、门锁、雨刮、后视镜、充电口
+    commands:
+      WindowCtrl.Open:
+        desc: 打开车窗。行驶中车速过高时只开一部分
+        params:
+          Position: {}
+          ActionPercent: {type: int, min: 0, max: 100, desc: 开度百分比，不填为全开}
+      WindowCtrl.Close:
+        desc: 关闭车窗
+        params: {Position: {}}
+      WindowCtrl.OpenMode:
+        desc: 车窗模式，例如通风（所有车窗开一条缝）
+        params: {Mode: {type: enum, values: [通风, 透气]}}
+      WindowCtrl.Pause: {desc: 车窗停止移动}
+      SkylightCtrl.Open:
+        desc: 打开天窗
+        params: {Mode: {type: enum, values: [全开, 起翘]}}
+      SkylightCtrl.Close: {desc: 关闭天窗}
+      SkylightCtrl.Pause: {desc: 天窗停止移动}
+      SkylightCtrl.Resume: {desc: 天窗继续移动}
+      CurtainCtrl.Open: {desc: 打开遮阳帘}
+      CurtainCtrl.Close: {desc: 关闭遮阳帘}
+      CurtainCtrl.Pause: {desc: 遮阳帘停止移动}
+      CurtainCtrl.Resume: {desc: 遮阳帘继续移动}
+      # 侧窗遮阳帘是模拟器的扩展（M5，v7 协议里没有），按座位控制
+      SunshadeCtrl.Open:
+        desc: 收起某个座位一侧的侧窗遮阳帘（不挡光）。车顶遮阳帘用 CurtainCtrl
+        params: {Position: {}}
+      SunshadeCtrl.Close:
+        desc: 拉上某个座位一侧的侧窗遮阳帘（挡阳光）。乘员说“晒”“太阳刺眼”时用，Position 不填就是说话人那一侧
+        params: {Position: {}}
+      SkyCurtainCtrl.Open: {desc: 同时打开天窗和遮阳帘}
+      SkyCurtainCtrl.Close: {desc: 同时关闭天窗和遮阳帘}
+      BackdoorCtrl.Open: {desc: 打开尾门（背门、后备箱）}
+      BackdoorCtrl.Close: {desc: 关闭尾门}
+      BackdoorCtrl.Pause: {desc: 尾门停止移动}
+      BackdoorCtrl.Resume: {desc: 尾门继续移动}
+      CarCtrl.SetBackdoorDegree:
+        desc: 设置尾门开启角度百分比
+        params: {Number: {min: 0, max: 100}}
+      CarCtrl.DoorUnlocked: {desc: 车门解锁}
+      CarCtrl.DoorLocked: {desc: 车门上锁}
+      CarCtrl.SetRearviewMirror:
+        desc: 调节外后视镜角度
+        params: {Position: {}, Direction: {}}
+      WiperCtrl.SetWiperSpeed:
+        desc: 设置雨刮速度，同时打开雨刮
+        params: {Number: {type: level}}
+      CarCtrl.OpenChargePort: {desc: 打开充电口盖}
+      CarCtrl.CloseChargePort: {desc: 关闭充电口盖}
+
+  climate:
+    desc: 空调与香氛：温度、风量、内外循环、除霜、风向、新风、香氛
+    commands:
+      ACCtrl.SetTemperature:
+        desc: 设置空调温度（16–32℃）。可给出目标温度，或只给方向表示调高/调低 1 度。会顺带打开空调
+        params:
+          Area: {}
+          Number: {min: 16, max: 32}
+          Direction: {}
+      ACCtrl.SetAirVolume:
+        desc: 设置风量（1–8 档）。空调关闭时不能调
+        params:
+          Area: {}
+          Number: {min: 1, max: 8}
+          Direction: {}
+      ACCtrl.OpenMode:
+        desc: 打开空调模式
+        params:
+          Area: {}
+          Mode: {type: enum, values: [内循环, 外循环, 除霜, 除雾, AC, 自动空调, 空气净化]}
+      ACCtrl.CloseMode:
+        desc: 关闭空调模式
+        params:
+          Area: {}
+          Mode: {type: enum, values: [内循环, 外循环, 除霜, 除雾, AC, 自动空调, 空气净化]}
+      ACCtrl.SetWindDirection:
+        desc: 设置出风方向。空调关闭时不能调
+        params: {Area: {}, Direction: {type: enum, values: [面, 脚, 面和脚, 脚和除霜, 自动]}}
+      ACCtrl.SetFreshAir:
+        desc: 设置新风
+        params: {Mode: {type: enum, values: [开, 关, 自动]}}
+      FragranceCtrl.SetFragrance:
+        desc: 设置香氛浓度，同时打开香氛
+        params: {Number: {type: level}}
+      FragranceCtrl.SetFragranceType:
+        desc: 切换香型
+        params: {Name: {type: str, desc: 香型名称，不填则换下一种}}
+
+  seat:
+    desc: 座椅：加热、通风、按摩、位置与靠背、零重力、记忆位置
+    commands:
+      SeatCtrl.SetHeating:
+        desc: 座椅加热档位，0 为关闭
+        params: {Position: {}, Number: {type: level}}
+      SeatCtrl.SetVentilation:
+        desc: 座椅通风档位，0 为关闭
+        params: {Position: {}, Number: {type: level}}
+      SeatCtrl.SetMassage:
+        desc: 座椅按摩档位，0 为关闭
+        params: {Position: {}, Number: {type: level}}
+      SeatCtrl.SetMassageTime:
+        desc: 设置按摩时长（分钟）
+        params: {Position: {}, Number: {min: 1, max: 30}}
+      SeatCtrl.NextMassageMode:
+        desc: 换一种按摩模式
+        params: {Position: {}, PreNext: {type: str}}
+      SeatCtrl.SetPosition:
+        desc: 调节座椅前后位置或靠背角度。行驶中不能调主驾座椅或放平座椅
+        params:
+          Position: {}
+          Area: {type: enum, values: [座椅, 靠背, 座椅腰托, 头枕, 坐垫]}
+          Direction: {}
+          Number: {min: 0, max: 100}
+      SeatCtrl.OpenZeroGMode:
+        desc: 打开零重力座椅。行驶中不能打开
+        params: {Position: {}}
+      SeatCtrl.CloseZeroGMode:
+        desc: 关闭零重力座椅
+        params: {Position: {}}
+      SeatCtrl.SavePosition:
+        desc: 保存当前座椅位置为记忆位置
+        params: {Position: {}, Area: {type: str}, SeatPosition: {type: enum, values: [位置一, 位置二, 位置三]}}
+      SeatCtrl.SetMemoryPosition:
+        desc: 恢复到某个记忆位置
+        params: {Position: {}, Area: {type: str}, SeatPosition: {type: enum, values: [位置一, 位置二, 位置三]}}
+      SeatCtrl.RecoveryPosition:
+        desc: 座椅复位
+        params: {Position: {}, Area: {type: str}}
+
+  lighting:
+    desc: 灯光：氛围灯、车标灯、大灯高度与延时、阅读灯
+    commands:
+      AtlightsCtrl.SetColor:
+        desc: 设置氛围灯颜色，同时打开氛围灯
+        params: {Color: {type: str, desc: 颜色}, Position: {type: str, desc: 主色或副色}}
+      AtlightsCtrl.SetLight:
+        desc: 设置氛围灯亮度（0–10），0 为关闭
+        params: {Number: {min: 0, max: 10}, Direction: {}}
+      AtlightsCtrl.SwitchTheme:
+        desc: 切换氛围灯主题
+        params: {Name: {type: str}}
+      CarCtrl.SetEmblemLamp:
+        desc: 设置车标灯颜色
+        params: {Color: {type: str}}
+      CarCtrl.SetHeadlampDelay:
+        desc: 设置大灯延时关闭（秒）
+        params: {Number: {min: 0, max: 120}}
+      HeadlightCtrl.SetHeight:
+        desc: 大灯高度（0–5）
+        params: {Number: {min: 0, max: 5}, Direction: {}}
+      CarCtrl.OpenReadingLamp:
+        desc: 打开阅读灯
+        params: {Position: {}}
+      CarCtrl.CloseReadingLamp:
+        desc: 关闭阅读灯
+        params: {Position: {}}
+
+  drive_energy:
+    desc: 驾驶与能源：驾驶模式、能量回收、充电上限、车道偏离、制动风格、全地形、悬架、行车记录仪。驾驶相关设置只有主驾能改
+    commands:
+      CarCtrl.SetDriveMode:
+        desc: 切换驾驶模式
+        params: {Mode: {type: enum, values: [舒适模式, 运动模式, 经济模式, 雪地模式, 自定义模式]}}
+      CarCtrl.SetEnergyRecovery:
+        desc: 能量回收强度
+        params: {Mode: {type: enum, values: [弱, 中, 强]}}
+      CarCtrl.SetMaximumCharging:
+        desc: 充电上限百分比，只能在 P 挡设置
+        params: {Number: {min: 50, max: 100}}
+      CarCtrl.SetLaneDepartureAssist:
+        desc: 车道偏离辅助模式
+        params: {Mode: {type: enum, values: [关闭, 预警, 纠偏, 预警和纠偏]}}
+      CarCtrl.SetBrakeStyle:
+        desc: 制动风格
+        params: {Mode: {type: enum, values: [舒适, 标准, 运动]}}
+      CarCtrl.SetAllTerrainMode:
+        desc: 全地形模式
+        params: {Mode: {type: str}}
+      SuspensionCtrl.SetMode:
+        desc: 悬架模式
+        params: {Mode: {type: enum, values: [舒适, 标准, 运动]}}
+      RecorderControl.Open: {desc: 打开行车记录仪}
+      RecorderControl.StartRecording: {desc: 行车记录仪开始录像}
+
+  vehicle_query:
+    desc: 车况查询：胎压、续航、电量、里程、车窗、温度、空调、空气质量。只读，不改变车辆状态
+    commands:
+      CarInfo.TirePressure: {desc: 查询胎压}
+      CarInfo.QueryEnduranceMileage: {desc: 查询续航里程}
+      CarInfo.QueryQuantityElectricity: {desc: 查询电量}
+      CarInfo.QueryTotalMileage: {desc: 查询总里程}
+      CarInfo.WindowStatus: {desc: 查询车窗、天窗、遮阳帘开度}
+      CarInfo.Temperature: {desc: 查询车内外温度}
+      CarInfo.AcState: {desc: 查询空调状态}
+      CarInfo.AirQuality: {desc: 查询车内空气质量}
+      CarInfo.DoorStatus: {desc: 查询车门锁状态}
+
+  system_settings:
+    desc: 系统设置：音量、静音、屏幕亮度、HUD、蓝牙、助手音色、时间格式
+    commands:
+      SoundCtrl.SetVolume:
+        desc: 设置音量（0–40）。可给数值，或方向调高/调低，或 Mode 最大/最小
+        params:
+          Number: {min: 0, max: 40}
+          Direction: {type: enum, values: [高, 低, 调高, 调低]}
+          Mode: {type: enum, values: [最大, 最小]}
+          Channel: {type: enum, values: [媒体, 导航, 通话, 语音]}
+      SoundCtrl.Off: {desc: 静音}
+      SoundCtrl.On: {desc: 取消静音}
+      ScreenCtrl.SetBrightness:
+        desc: 中控屏亮度（1–10）
+        params: {Number: {min: 1, max: 10}, Direction: {type: enum, values: [调高, 调低, 提高, 降低]}}
+      HudCtrl.SetHeight:
+        desc: HUD 高度（1–10）
+        params: {Number: {min: 1, max: 10}, Direction: {}}
+      HudCtrl.SetBrightness:
+        desc: HUD 亮度（1–10）
+        params: {Number: {min: 1, max: 10}, Direction: {}}
+      BlueToothCtrl.DisConnectBlueTooth: {desc: 断开蓝牙}
+      BlueToothCtrl.ConnectBluetooh: {desc: 连接蓝牙}
+      VoiceAssistant.SetTimbre:
+        desc: 切换语音助手音色
+        params: {Name: {type: str}}
+      SystemCtrl.SetTimeFormat:
+        desc: 时间显示格式
+        params: {Category: {type: enum, values: ["12", "24"]}}
+
+  switch_device:
+    desc: 通用开关：用设备名打开或关闭一个设备，例如空调、座椅加热、方向盘加热、氛围灯、HUD、蓝牙
+    commands:
+      Device.Open:
+        desc: 打开设备
+        params:
+          Device: {type: str, desc: 设备名，见 devices.yaml}
+          Position: {}
+      Device.Close:
+        desc: 关闭设备
+        params:
+          Device: {type: str, desc: 设备名，见 devices.yaml}
+          Position: {}

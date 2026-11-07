@@ -1,0 +1,91 @@
+# 执行层的前置条件规则（开发计划 7.3 灰区）。
+#
+# 指令照常下发，命中规则时不执行，返回对应状态码，由大脑解释原因并给出替代方案。
+# 按顺序检查，第一条命中的规则生效。一条规则的所有条件同时满足才算命中：
+#
+#   tools        指令属于这些领域工具
+#   commands     指令名，支持结尾的 *（例如 SkylightCtrl.*）
+#   except       排除这些指令
+#   profile      车型
+#   seat_not     说话人不是这个座位
+#   devices      Device 参数（按设备表归一后的名字）属于这些设备
+#   rear_target  目标区域包含后排（Area / Position 含“后”，或目标座位都在后排）
+#   flat         参数里出现“放平”
+#   target_seat  目标座位包含这个座位（Position 不填时取说话人的座位）
+#   args_not     参数不等于这些值，例如 {Source: 本地}
+#   state        车况条件，路径 → {eq|ne|gt|gte|lt|lte: 值}
+#
+# PartSucceed（车速过高时车窗只开一部分）不是拦截，而是执行一部分，在处理函数里实现，阈值见 limits。
+
+limits:
+  window_full_open_max_speed: 120   # 车速达到这个值时，车窗最多开到 window_partial_percent
+  window_partial_percent: 30
+
+rules:
+  # 车型没有这个设备
+  - code: NotFound
+    profile: [basic]
+    commands: [SkylightCtrl.*, SkyCurtainCtrl.*, HudCtrl.*]
+  - code: NotFound
+    profile: [basic]
+    devices: [HUD, 天窗]
+  - code: NotFound
+    profile: [basic]
+    commands: [ACCtrl.*]
+    rear_target: true
+  - code: NotFound
+    profile: [basic]
+    devices: [空调]
+    rear_target: true
+
+  # 未上电
+  - code: PrecondPowerNotSupported
+    tools: [climate, seat, lighting]
+    state: {power_on: {eq: false}}
+  - code: PrecondPowerNotSupported
+    tools: [switch_device]
+    devices: [空调, 座椅加热, 座椅通风, 座椅按摩, 方向盘加热, 空气净化, 自动除雾, 氛围灯, HUD, 香氛]
+    state: {power_on: {eq: false}}
+
+  # 只有主驾能改驾驶设置
+  - code: PrecondUserNotSupported
+    tools: [drive_energy]
+    except: [RecorderControl.*]
+    seat_not: 主驾
+
+  # 行驶中的限制
+  - code: PrecondSpeedNotSupported
+    commands: [SeatCtrl.SetPosition, SeatCtrl.RecoveryPosition, SeatCtrl.SetMemoryPosition]
+    target_seat: 主驾
+    state: {speed_kmh: {gt: 0}}
+  - code: PrecondSpeedNotSupported
+    commands: [SeatCtrl.SetPosition]
+    flat: true
+    state: {speed_kmh: {gt: 0}}
+  - code: PrecondSpeedNotSupported
+    commands: [SeatCtrl.OpenZeroGMode, CarCtrl.DoorUnlocked, BackdoorCtrl.Open, CarCtrl.SetBackdoorDegree]
+    state: {speed_kmh: {gt: 0}}
+  - code: PrecondSpeedNotSupported
+    commands: [Device.Open]
+    devices: [背门]
+    state: {speed_kmh: {gt: 0}}
+
+  # 挡位限制
+  - code: PrecondNotSupported
+    commands: [CarCtrl.SetMaximumCharging, CarCtrl.OpenChargePort]
+    state: {gear: {ne: P}}
+
+  # 空调没开
+  - code: NotAC
+    commands: [ACCtrl.SetAirVolume, ACCtrl.SetWindDirection]
+    state: {ac.on: {eq: false}}
+
+  # App 层的前置条件（App 本身从 M3 开始实现，这里先把状态码接上）
+  - code: BluetoothDisconnected
+    tools: [phone]
+    commands: [PhoneCall.Dial*]
+    state: {phone.bluetooth: {eq: false}}
+  - code: NotNet
+    tools: [media_play]
+    args_not: {Source: 本地}
+    state: {network: {eq: false}}

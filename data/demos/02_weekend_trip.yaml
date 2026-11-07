@@ -1,0 +1,24 @@
+title: 周末出游
+file: demos/02_weekend_trip.yaml
+summary: 长沙多地点行程，中午找湘菜，用“第二家”指代上一轮结果，再订位
+behaviors:
+- '#3 前后有依赖的事按顺序办'
+- '#5 多轮指代和省略'
+case_id: multi-demo2-trip
+profile: null
+init:
+  location: 湖南大学
+  now: '2026-11-08T10:30:00'
+turns:
+- seat: 主驾
+  text: 先去橘子洲头再去岳麓书院
+  note: 途经点 + 目的地
+- seat: 主驾
+  text: 中午在附近找家湘菜
+  note: 交给美团，列出 3 家
+- seat: 主驾
+  text: 第二家
+  note: 指代上一轮的第二家，问是导航还是订位，或直接看详情
+- seat: 主驾
+  text: 帮我订四个人十二点的位子
+  note: 美团出订座草稿 → 复述后弹确认

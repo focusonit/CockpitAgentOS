@@ -1,0 +1,27 @@
+title: 中途插话
+file: demos/09_interrupt.yaml
+summary: 点外卖途中插一句调空调，办完后大脑主动问外卖还要不要继续；继续后确认下单
+behaviors:
+- '#6 话题中途插入、再回来'
+- '#10 主动但不啰嗦地澄清'
+- '#13 下单前确认'
+case_id: multi-demo9-interrupt
+profile: null
+init:
+  ac.on: 开
+turns:
+- seat: 主驾
+  text: 帮我点份外卖
+  note: 只问一个关键问题：想吃什么
+- seat: 主驾
+  text: 附近的黄焖鸡就行
+  note: 美团找黄焖鸡，列店
+- seat: 主驾
+  text: 把空调调低点
+  note: 调低温度，办完主动问“刚才的外卖还要继续吗”
+- seat: 主驾
+  text: 继续，要大份的送到公司
+  note: 美团出草稿 → 复述 → 弹确认
+- seat: 主驾
+  text: 确认
+  note: 确认下单

@@ -1,0 +1,31 @@
+{
+  "_说明": "模拟曲库。local=true 的歌在本地，没网时也能放。",
+  "songs": [
+    {"title": "晴天", "artist": "周杰伦", "album": "叶惠美", "duration_s": 269, "styles": ["流行"], "local": true},
+    {"title": "稻香", "artist": "周杰伦", "album": "魔杰座", "duration_s": 223, "styles": ["流行", "治愈"], "local": false},
+    {"title": "七里香", "artist": "周杰伦", "album": "七里香", "duration_s": 299, "styles": ["流行"], "local": false},
+    {"title": "夜曲", "artist": "周杰伦", "album": "十一月的萧邦", "duration_s": 226, "styles": ["流行"], "local": false},
+    {"title": "告白气球", "artist": "周杰伦", "album": "周杰伦的床边故事", "duration_s": 215, "styles": ["流行", "甜蜜"], "local": true},
+    {"title": "海阔天空", "artist": "Beyond", "album": "乐与怒", "duration_s": 326, "styles": ["摇滚", "励志"], "local": true},
+    {"title": "光辉岁月", "artist": "Beyond", "album": "命运派对", "duration_s": 297, "styles": ["摇滚", "励志"], "local": false},
+    {"title": "无地自容", "artist": "黑豹乐队", "album": "黑豹", "duration_s": 260, "styles": ["摇滚", "提神"], "local": false},
+    {"title": "倔强", "artist": "五月天", "album": "神的孩子都在跳舞", "duration_s": 259, "styles": ["摇滚", "励志", "提神"], "local": false},
+    {"title": "干杯", "artist": "五月天", "album": "第二人生", "duration_s": 289, "styles": ["摇滚"], "local": false},
+    {"title": "追梦赤子心", "artist": "GALA", "album": "追梦痴子心", "duration_s": 303, "styles": ["摇滚", "提神", "励志"], "local": false},
+    {"title": "Uptown Funk", "artist": "Bruno Mars", "album": "Uptown Special", "duration_s": 270, "styles": ["动感", "提神", "欧美"], "local": false},
+    {"title": "Believer", "artist": "Imagine Dragons", "album": "Evolve", "duration_s": 204, "styles": ["摇滚", "提神", "欧美"], "local": true},
+    {"title": "平凡之路", "artist": "朴树", "album": "猎户星座", "duration_s": 301, "styles": ["民谣", "治愈"], "local": false},
+    {"title": "成都", "artist": "赵雷", "album": "无法长大", "duration_s": 328, "styles": ["民谣"], "local": true},
+    {"title": "River Flows in You", "artist": "Yiruma", "album": "First Love", "duration_s": 190, "styles": ["轻音乐", "钢琴", "放松"], "local": true},
+    {"title": "卡农", "artist": "群星", "album": "钢琴经典", "duration_s": 300, "styles": ["轻音乐", "古典", "放松"], "local": false},
+    {"title": "孤勇者", "artist": "陈奕迅", "album": "孤勇者", "duration_s": 256, "styles": ["流行", "励志"], "local": false},
+    {"title": "小幸运", "artist": "田馥甄", "album": "我的少女时代", "duration_s": 265, "styles": ["流行", "甜蜜"], "local": false},
+    {"title": "两只老虎", "artist": "儿歌", "album": "宝宝儿歌", "duration_s": 60, "styles": ["儿歌"], "local": true}
+  ],
+  "videos": [
+    {"title": "狂飙", "episodes": 39, "kind": "电视剧"},
+    {"title": "小猪佩奇", "episodes": 52, "kind": "动画片"},
+    {"title": "汪汪队立大功", "episodes": 26, "kind": "动画片"},
+    {"title": "流浪地球2", "episodes": 1, "kind": "电影"}
+  ]
+}

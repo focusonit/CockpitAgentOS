@@ -1,0 +1,20 @@
+.env
+.env.*
+!.env.example
+eval/reports/
+__pycache__/
+.venv/
+node_modules/
+frontend/dist/
+
+# 研究文档与测试脚本源文件，不进版本库
+doc/
+
+# Claude Code 的项目说明，只在本地用
+CLAUDE.md
+
+# 本地杂项
+.DS_Store
+.coverage
+.pytest_cache/
+*.tsbuildinfo

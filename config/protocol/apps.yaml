@@ -1,0 +1,283 @@
+# App 层与子代理的协议定义。
+#
+# kind: app       App 工具：指令 + 命名参数，和车端工具同样的格式。M3 之前执行器直接返回 Success（由 App 处理）。
+# kind: subagent  子代理：参数只有一个 task（自然语言任务描述），由子代理自己完成多步操作。
+#
+# 指令和参数名以测试用例为准（v7 测试场景脚本），不要随意改名。
+
+tools:
+  navigation:
+    kind: app
+    desc: 导航：搜索地点并导航、回家/去公司、沿途或周边搜索、路线偏好、地图缩放、结束导航
+    commands:
+      Navigation.SearchPoi:
+        desc: 搜索地点并发起导航。Keyword 写地点的标准名称（例如“大裤衩”写“中央电视台总部大楼”）；先去 A 再去 B 时 Keyword 写 B、Waypoint 写 A
+        params:
+          Keyword: {type: str, desc: 目的地关键词}
+          KeyWord: {type: str, desc: 同 Keyword（兼容写法）}
+          Waypoint: {type: str, desc: 途经点，多个用“、”分隔}
+      Navigation.NavigationToFavorite:
+        desc: 导航去收藏地点（家、公司）
+        params:
+          Type: {type: enum, values: [家, 公司], desc: 收藏地点类型}
+          Number: {type: str, desc: 收藏夹里的序号}
+      Navigation.SearchAround:
+        desc: 搜索当前位置周边，例如附近的加油站、充电站、停车场
+        params:
+          Keyword: {type: str, desc: 周边搜索关键词}
+      Navigation.AlongSearch:
+        desc: 沿途搜索，例如沿途的服务区、充电站
+        params:
+          Keyword: {type: str, desc: 沿途搜索关键词}
+      Navigation.SwitchRouteStrategy:
+        desc: 切换路线偏好
+        params:
+          RouteStrategy: {type: enum, values: [躲避拥堵, 高速优先, 不走高速, 少收费, 时间最短, 距离最短, 推荐], desc: 路线偏好}
+      Navigation.AddWaypointsByName:
+        desc: 在当前路线上添加途经点
+        params:
+          Keyword: {type: str, desc: 途经点名称或类别，例如 加油站}
+      Navigation.DeleteAllWaypoints: {desc: 删除全部途经点}
+      Navigation.QueryDistanceTime: {desc: 查询到目的地还有多远、多久}
+      Navigation.ZoomIn: {desc: 放大地图}
+      Navigation.ZoomOut: {desc: 缩小地图}
+      Navigation.OpenOverview: {desc: 查看全览}
+      Navigation.Cancel: {desc: 结束导航}
+      Navigation.Close: {desc: 关闭导航应用}
+
+  nav_query:
+    kind: app
+    desc: 地点查询（只查不导航）：查地址、查家/公司地址
+    commands:
+      Navigation.SearchPOI:
+        desc: 查询地点信息，不发起导航
+        params:
+          KeyWord: {type: str, desc: 地点关键词}
+      Navigation.GetAddressByType:
+        desc: 查询收藏地址
+        params:
+          Type: {type: str, desc: "家（1）、公司（2）、当前位置（4）"}
+
+  media_play:
+    kind: app
+    desc: 播放媒体：音乐、新闻、视频、播客，打开或关闭音乐
+    commands:
+      Music.Play:
+        desc: 播放音乐。可指定歌名、歌手、来源（例如 QQ音乐、网易云）
+        params:
+          Song: {type: str, desc: 歌名}
+          Singer: {type: str, desc: 歌手}
+          Source: {type: str, desc: 来源；放本地音乐或没网时填“本地”}
+          Style: {type: str, desc: 风格，例如 轻音乐、摇滚、提神}
+          Album: {type: str, desc: 专辑名}
+      Music.PlayAlbum:
+        desc: 播放专辑
+        params:
+          Album: {type: str, desc: 专辑名}
+          Singer: {type: str, desc: 歌手}
+      Music.Open:
+        desc: 打开音乐应用
+        params:
+          Source: {type: str, desc: 来源}
+      Music.Close: {desc: 关闭音乐}
+      Music.OpenLyrics: {desc: 打开歌词}
+      Music.CloseLyrics: {desc: 关闭歌词}
+      Music.PlayMV:
+        desc: 播放歌曲的 MV，不填 Song 为当前歌曲
+        params:
+          Song: {type: str, desc: 歌名}
+      Music.PlayCurrentMV: {desc: 播放当前歌曲的 MV}
+      Music.CloseMV: {desc: 关闭 MV}
+      Music.Dislike: {desc: 不喜欢当前歌曲，跳到下一首且以后不再推荐}
+      Music.PlayFavorite: {desc: 播放收藏的歌曲}
+      News.Play:
+        desc: 播放新闻
+        params:
+          Category: {type: str, desc: 新闻类别}
+      Video.Play:
+        desc: 播放视频
+        params:
+          Resource: {type: str, desc: 视频名}
+          Episode: {type: str, desc: 第几集}
+      Podcast.Play:
+        desc: 播放播客或有声书
+        params:
+          Resource: {type: str, desc: 节目名}
+
+  media_control:
+    kind: app
+    desc: 控制当前播放：暂停、继续、上一首、下一首、快进快退、播放模式、收藏、当前播放
+    commands:
+      GlobalCtrl.Pause: {desc: 暂停}
+      GlobalCtrl.Resume: {desc: 继续播放}
+      GlobalCtrl.Next: {desc: 下一首}
+      GlobalCtrl.Previous: {desc: 上一首}
+      GlobalCtrl.FastForward: {desc: 快进}
+      GlobalCtrl.FastBackward: {desc: 快退}
+      GlobalCtrl.SetPlayMode:
+        desc: 设置播放模式
+        params:
+          Mode: {type: enum, values: [单曲循环, 列表循环, 随机播放, 顺序播放, SingleLoop, ListLoop, ShufflePlay, SequencePlay]}
+      GlobalCtrl.AddFavorite: {desc: 收藏当前歌曲}
+      GlobalCtrl.OpenFavoriteList: {desc: 打开收藏列表}
+      GlobalCtrl.CurrentPlay: {desc: 查询正在播放什么}
+
+  phone:
+    kind: app
+    desc: 电话：打给联系人或号码、挂断、接听、回拨、通话记录、同步通讯录、道路救援（Bcall）和紧急呼叫（Ecall）
+    commands:
+      PhoneCall.DialContact:
+        desc: 打电话给联系人
+        params:
+          Name: {type: str, desc: 联系人}
+          Phone: {type: str, desc: 号码}
+      PhoneCall.DialNumber:
+        desc: 拨打号码
+        params:
+          Phone: {type: str, desc: 电话号码}
+      PhoneCall.HangUp: {desc: 挂断}
+      PhoneCall.Answer: {desc: 接听}
+      PhoneCall.ReCall: {desc: 回拨}
+      PhoneCall.OpenCallLog:
+        desc: 打开通话记录
+        params:
+          CallLogType: {type: str, desc: 记录类型，例如 未接}
+      PhoneCall.SyncAddressBook: {desc: 同步通讯录}
+      BcallCall.DialContact: {desc: 呼叫道路救援，需用户确认}
+      EcallCall.DialContact: {desc: 紧急呼叫，需用户确认}
+
+  contact_query:
+    kind: app
+    desc: 查询通讯录里的联系人
+    commands:
+      PhoneCall.Search:
+        desc: 按名字查联系人
+        params:
+          Name: {type: str, desc: 联系人}
+
+  open_page:
+    kind: app
+    desc: 打开或关闭应用和页面：打开某个 App、返回、回到桌面、打开空调或座椅设置页、卸载应用
+    commands:
+      APP.Open:
+        desc: 打开应用
+        params:
+          App: {type: str, desc: 应用名}
+      APP.Close:
+        desc: 关闭应用
+        params:
+          App: {type: str, desc: 应用名}
+      APP.Uninstall:
+        desc: 卸载应用，需用户确认
+        params:
+          App: {type: str, desc: 应用名}
+      PageCtrl.OpenACSettings: {desc: 打开空调设置页}
+      PageCtrl.OpenSeatSettings:
+        desc: 打开座椅设置页
+        params:
+          SeatFunctions: {type: str, desc: 座椅功能，例如 加热、按摩}
+      PageCtrl.CloseSeatSettings:
+        desc: 关闭座椅设置页
+        params:
+          SeatFunctions: {type: str, desc: 座椅功能}
+      GlobalCtrl.Back: {desc: 返回上一页}
+      GlobalCtrl.Home: {desc: 回到桌面}
+
+  system_apps:
+    kind: app
+    desc: 系统应用：手机互联（HiCar）、拍照、自拍
+    commands:
+      PhoneLink.OpenHiCar: {desc: 打开 HiCar}
+      TakePhoto.Selfie: {desc: 车内自拍}
+      TakePhoto.Photo.Snap: {desc: 拍照}
+
+  mini_program:
+    kind: app
+    desc: 小程序：讲故事、查快递、查排队进度
+    commands:
+      MiniProgram.PlayStorytelling:
+        desc: 播放有声书、评书（用户点名某本书时用）。用户让你“讲个故事”时自己用文字讲，不要调用
+        params:
+          Resource: {type: str, desc: 书名}
+      MiniProgram.QueryPackage: {desc: 查快递}
+      MiniProgram.QueryQueue: {desc: 查排队进度}
+
+  ai_creation:
+    kind: app
+    desc: AI 创作：生成壁纸
+    commands:
+      PaintWallpapers.Create:
+        desc: 按描述生成壁纸
+        params:
+          Content: {type: str, desc: 画面描述}
+
+  meituan_app:
+    kind: app
+    hidden: true
+    desc: 美团 App 的触屏操作（不给模型用，模型通过 meituan 子代理操作美团）
+    commands:
+      Meituan.Search:
+        desc: 搜索商户
+        params:
+          Keyword: {type: str, desc: 关键词}
+          MaxPrice: {type: int, min: 0, max: 100000, desc: 人均上限}
+          Sort: {type: enum, values: [距离, 评分, 人均], desc: 排序}
+      Meituan.OpenMerchant:
+        desc: 打开商户详情
+        params:
+          Index: {type: int, min: 1, max: 50, desc: 列表里的第几家（从 1 开始）}
+          Name: {type: str, desc: 商户名}
+      Meituan.AddToCart:
+        desc: 加入购物车
+        params:
+          Item: {type: str, desc: 菜品名}
+          Count: {type: int, min: 1, max: 99, desc: 份数}
+          Size: {type: str, desc: 规格，例如 大份}
+          Note: {type: str, desc: 备注，例如 少冰}
+      Meituan.RemoveFromCart:
+        desc: 从购物车移除
+        params:
+          Item: {type: str, desc: 菜品名}
+      Meituan.MakeDraft:
+        desc: 用购物车生成订单草稿
+        params:
+          Address: {type: str, desc: 送达地址，例如 公司}
+      Meituan.CancelDraft: {desc: 取消订单草稿}
+      Meituan.PlaceOrder: {desc: 提交订单草稿}
+      Meituan.Book:
+        desc: 订座或订酒店
+        params:
+          People: {type: int, min: 1, max: 30, desc: 人数}
+          Time: {type: str, desc: 时间，例如 12:00}
+      Meituan.Back: {desc: 返回商户列表}
+
+  phone_link:
+    kind: app
+    hidden: true
+    desc: 手车互联（M5 模拟器扩展，v7 里没有）：手机推送目的地到车机，车机导航弹出路线卡片，在车里确认出发或忽略。不给模型用
+    commands:
+      PhoneLink.PushDestination:
+        desc: 手机把目的地推送到车机，导航 App 弹出路线卡片（不会直接开始导航）
+        params:
+          Keyword: {type: str, desc: 目的地}
+      PhoneLink.AcceptPush: {desc: 按手机推送的目的地开始导航}
+      PhoneLink.DismissPush: {desc: 忽略手机推送的目的地}
+
+  task_master:
+    kind: subagent
+    desc: 定时与条件任务：“半小时后关空调”“到公司提醒我”“下班后打开座椅加热”。task 写清触发条件和要做的事
+  web_search:
+    kind: subagent
+    desc: 联网搜索：天气、新闻、股价、百科等需要实时信息的问题
+  car_expert:
+    kind: subagent
+    desc: 用车专家：车辆功能说明、故障灯含义、保养建议、操作方法（“怎么开启自动泊车”“胎压灯亮了怎么办”）
+  meituan:
+    kind: subagent
+    desc: 美团：搜索餐厅、外卖、团购，打开第几家商户看菜单，生成订单草稿（不会直接下单）。task 用用户原话，例如“找家附近的火锅，打开第二家”
+  meituan_place_order:
+    kind: subagent
+    desc: 美团下单：把已确认的订单草稿提交。必须先得到用户确认
+  home:
+    kind: subagent
+    desc: 智能家居：控制家里的空调、灯、扫地机器人等

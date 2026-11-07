@@ -1,0 +1,23 @@
+title: 车况疑问
+file: demos/05_tire.yaml
+summary: 仪表左后胎压报警，问灯什么意思（用车专家）→ 找补胎店 → 导航过去
+behaviors:
+- '#1 听懂感受，结合车况推断'
+- '#3 前后有依赖的事按顺序办'
+case_id: multi-demo5-tire
+profile: null
+init:
+  speed_kmh: '50'
+  gear: D
+  warnings: 左后胎压低
+  tire_pressure.左后: '1.9'
+turns:
+- seat: 主驾
+  text: 这个灯是什么意思
+  note: 大脑把报警和胎压写进 task 交给用车专家
+- seat: 主驾
+  text: 附近哪有补胎的
+  note: nav_query 搜补胎店，列出几家
+- seat: 主驾
+  text: 导航过去
+  note: 用上一轮结果的名称 Navigation.SearchPoi

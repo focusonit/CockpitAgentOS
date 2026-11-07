@@ -1,0 +1,26 @@
+title: 出门前
+file: demos/08_before_leaving.yaml
+summary: 先说“我比较怕冷”，开空调默认温度偏高；导航和找川菜并行；“再高一点”指代温度
+behaviors:
+- '#2 一句话办几件事'
+- '#5 多轮指代和省略'
+- '#8 会话内记住偏好'
+- '#9 俗称和口语'
+case_id: multi-demo8-pref
+profile: null
+init:
+  ac.on: 关
+  outside_temp: '8'
+turns:
+- seat: 主驾
+  text: 我比较怕冷
+  note: 记住偏好，简短回应
+- seat: 主驾
+  text: 开空调
+  note: 开空调，温度默认偏高（如 26℃）并说明
+- seat: 主驾
+  text: 导航到大裤衩顺便找个附近人均一百以下的川菜馆
+  note: 导航（中央电视台总部大楼）和美团并行
+- seat: 主驾
+  text: 再高一点
+  note: 指代空调温度，调高 1℃

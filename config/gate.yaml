@@ -1,0 +1,94 @@
+# 安全闸门前置规则（开发计划 §7.1）：端侧确定性规则，命中就直接回复，不调用任何工具、不上云。
+#
+# 每条规则：
+#   patterns  正则，任意一条在归一化后的原话里搜到就算命中（re.search，不区分大小写）
+#   unless    可选，命中任意一条就不拦（例如“怎么开启自动泊车”是问用法，交给 car_expert）
+#   reply     固定回复
+#
+# category：
+#   black        黑区：驾驶控制类，婉拒并说明
+#   harmful      违法有害：拒绝
+#   unsupported  未上线能力：如实说暂不支持（trace 记为 unsupported）
+#
+# 改了规则要跑 backend/tests/test_m4.py：里面会拿全部评测用例检查有没有误拦。
+
+# 用户在问“怎么用 / 是什么”，不是让助手去做
+question_words: &question ["怎么", "如何", "什么意思", "是什么", "在哪", "哪里", "为什么", "有没有", "介绍", "说明"]
+# 驾驶辅助功能的设置项（“打开并线辅助”“代客泊车权限”“智驾风格设置为保守”）是允许的车控，不是让助手开车
+setting_words: &setting ["怎么", "如何", "什么意思", "是什么", "在哪", "哪里", "为什么", "有没有", "介绍", "说明",
+                         "辅助", "盲区", "权限", "提示", "风格", "预警", "灵敏度", "触发", "设置为", "设为", "模式", "切换"]
+
+rules:
+  - id: lane_change
+    category: black
+    patterns: ["变道", "换道", "并线", "变到.{0,4}车道", "切到.{0,4}车道"]
+    unless: *setting
+    reply: 变道需要你自己操作，我不能控制车辆行驶，注意观察后方来车。
+  - id: overtake
+    category: black
+    patterns: ["超车", "超过前面", "超过那辆", "加速超"]
+    reply: 超车要由你自己判断和操作，我不能控制车辆行驶。
+  - id: cruise
+    category: black
+    patterns: ["巡航.{0,6}(速度|车速|设到|调到|开到)"]
+    unless: *setting
+    reply: 巡航车速需要你在方向盘上自己设置，我不能控制车速。
+  - id: parking
+    category: black
+    patterns: ["自动泊车", "代客泊车", "帮我停车", "自己停进去"]
+    unless: *setting
+    reply: 自动泊车需要你在中控屏上手动发起，我不能直接控制泊车。
+  - id: safety_systems
+    category: black
+    patterns: ["紧急制动", "AEB", "车身稳定", "ESP", "ESC", "安全气囊", "气囊"]
+    unless: *question
+    reply: 安全相关的系统我不能帮你开关，如确有需要请在车辆设置里手动操作。
+  - id: power_off
+    category: black
+    patterns: ["下电", "熄火"]
+    unless: *question
+    reply: 下电需要你在 P 挡时手动操作，我不能帮你控制车辆上下电。
+  - id: driving_assist
+    category: black
+    patterns: ["领航", "NOA", "智驾", "智能驾驶", "自动驾驶", "辅助驾驶"]
+    unless: *setting
+    reply: 智能驾驶需要你自己在方向盘上开启，我不能直接控制驾驶功能。
+  - id: driving_control
+    category: black
+    patterns: ["(踩|点|松).{0,2}刹车", "帮我刹车", "刹一下", "(往|向)(左|右).{0,2}(打|转).{0,2}方向", "打方向盘", "(挂|换|切)(到|成|入)?(P|R|N|D|倒|空|前进|驻车)(挡|档)", "^(挂挡|换挡|挂档|换档)$", "^(加速|减速)$", "开快点", "开慢点"]
+    unless: *question
+    reply: 刹车、转向和换挡需要你自己操作，我不能控制车辆行驶。
+
+  - id: drugs
+    category: harmful
+    patterns: ["海洛因", "冰毒", "毒品", "大麻", "摇头丸", "可卡因"]
+    reply: 这个我不能帮你，涉及违法的事情请不要尝试。
+  - id: weapons
+    category: harmful
+    patterns: ["炸弹", "炸药", "爆炸物", "枪支", "制作.{0,4}武器"]
+    reply: 这个我不能帮你，涉及危险物品的内容我不会提供。
+  - id: theft
+    category: harmful
+    patterns: ["撬.{0,3}锁", "偷车", "撬车", "破解.{0,4}(车锁|钥匙)"]
+    reply: 这个我不能帮你。如果你被锁在车外，可以联系荣威官方道路救援。
+
+  - id: outside_vision
+    category: unsupported
+    patterns: ["(那个|前面|路边|外面|旁边).{0,4}(牌子|招牌|指示牌|广告牌)", "(那栋|这栋|前面的?)楼是什么", "窗外.{0,4}(是什么|有什么)", "看看(外面|车外|前面)"]
+    reply: 我暂时还看不到车外的画面，没法帮你识别，等这个功能上线后就可以了。
+  - id: customer_service
+    category: unsupported
+    patterns: ["400.{0,2}(客服|电话)", "(打|转|拨).{0,2}400", "人工客服", "转客服"]
+    reply: 暂时不支持帮你转接客服电话，你可以在手机上直接拨打荣威客服热线。
+  - id: douyin
+    category: unsupported
+    patterns: ["抖音.{0,12}(点赞|点个赞|关注|评论|转发)", "(点赞|点个赞).{0,8}抖音"]
+    reply: 暂时还不支持在抖音里点赞或关注，这个需要你在手机上操作。
+  - id: trip_planning
+    category: unsupported
+    patterns: ["规划.{0,12}(旅行|旅游|行程|自驾游)", "[一二三四五六七八九十两\\d]天[一二三四五六七八九十两\\d]夜"]
+    reply: 多日的旅行规划我暂时还做不了，可以先告诉我第一站去哪，我帮你导航。
+
+# 模型自己拼出来的调用也要拦（§7.1“即使模型构造了调用也被拦截”）：
+# 调用参数里任意字符串值搜到这些词，就不执行，返回 Failed 并说明原因。
+blocked_args: ["领航", "NOA", "智驾", "自动驾驶", "自动泊车", "紧急制动", "AEB", "车身稳定", "ESP", "安全气囊", "定速巡航", "自适应巡航", "下电"]

@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+/* 颜色语义与架构图一致：--veh 车端（绿）、--cloud 云端（靛蓝）、--safe 安全闸门（琥珀）、--fast-bg 快速通道 */
+:root {
+  --bg: #f4f4f1;
+  --panel: #ffffff;
+  --fg: #1c1c1a;
+  --muted: #6d6c66;
+  --line: #e2e1da;
+  --veh: #2f7d4f;
+  --veh-bg: #e6f2ea;
+  --cloud: #4a4fc4;
+  --cloud-bg: #ebecfa;
+  --safe: #b7791f;
+  --safe-bg: #fbf1df;
+  --fast-bg: #eef6f8;
+  --bad: #b3261e;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141413;
+    --panel: #1e1e1c;
+    --fg: #ebeae4;
+    --muted: #9b9a90;
+    --line: #33322e;
+    --veh: #6cc58f;
+    --veh-bg: #1c2e23;
+    --cloud: #9ea2f5;
+    --cloud-bg: #23243f;
+    --safe: #e8b45c;
+    --safe-bg: #3a2e18;
+    --fast-bg: #1a2a2e;
+    --bad: #f2867d;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #141413;
+  --panel: #1e1e1c;
+  --fg: #ebeae4;
+  --muted: #9b9a90;
+  --line: #33322e;
+  --veh: #6cc58f;
+  --veh-bg: #1c2e23;
+  --cloud: #9ea2f5;
+  --cloud-bg: #23243f;
+  --safe: #e8b45c;
+  --safe-bg: #3a2e18;
+  --fast-bg: #1a2a2e;
+  --bad: #f2867d;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-panel: var(--panel);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-veh: var(--veh);
+  --color-veh-bg: var(--veh-bg);
+  --color-cloud: var(--cloud);
+  --color-cloud-bg: var(--cloud-bg);
+  --color-safe: var(--safe);
+  --color-safe-bg: var(--safe-bg);
+  --color-fast-bg: var(--fast-bg);
+  --color-bad: var(--bad);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 14px/1.55 -apple-system, "PingFang SC", "Noto Sans SC", sans-serif;
+}
+
+/* 豆包形象（M5）：说话时嘴巴开合，思考时气泡闪烁；减少动态效果时关闭动画 */
+@keyframes avatar-talk {
+  50% { transform: scaleY(0.3); }
+}
+@keyframes avatar-dots {
+  50% { opacity: 0.25; }
+}
+.avatar-talk {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: avatar-talk 0.35s ease-in-out infinite;
+}
+.avatar-dots {
+  animation: avatar-dots 1s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .avatar-talk, .avatar-dots { animation: none; }
+}

@@ -1,0 +1,18 @@
+title: 点咖啡
+file: demos/07_coffee.yaml
+summary: 点两杯瑞幸美式少冰，送到公司，复述订单后弹确认，确认后下单
+behaviors:
+- '#13 下单前确认'
+case_id: multi-demo7-coffee
+profile: null
+init: {}
+turns:
+- seat: 主驾
+  text: 帮我点两杯瑞幸美式少冰
+  note: 美团找店选商品；缺地址时只问送到哪
+- seat: 主驾
+  text: 送到公司
+  note: 美团出订单草稿 → 大脑复述店、商品、金额 → meituan_place_order 弹确认
+- seat: 主驾
+  text: 确认
+  note: 页面点“确认”或说确认，续上下单

@@ -1,0 +1,27 @@
+title: 早高峰通勤
+file: demos/01_commute.yaml
+summary: 冬天早上上车，大脑看车况推断“好冷”、按心情选歌、躲拥堵去公司、把九点的周会交给任务大师
+behaviors:
+- '#1 听懂感受，结合车况推断'
+- '#4 时间条件交给任务大师'
+- '#9 俗称和口语'
+case_id: multi-demo1-commute
+profile: null
+init:
+  outside_temp: '3'
+  cabin_temp: '10'
+  now: '2026-11-05T08:10:00'
+  ac.on: 关
+turns:
+- seat: 主驾
+  text: 好冷
+  note: 空调没开 → 开空调并调高温度，冬天可顺带开座椅加热；要说出理由
+- seat: 主驾
+  text: 放点提神的歌
+  note: Music.Play，按“提神”选歌
+- seat: 主驾
+  text: 导航去公司躲开拥堵
+  note: 导航去公司 + 路线偏好“躲避拥堵”
+- seat: 主驾
+  text: 九点提醒我开周会
+  note: 交给任务大师；页面任务列表里能看到，可“立即触发”

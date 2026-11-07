@@ -1,0 +1,26 @@
+title: 车里很吵
+file: demos/03_noisy.yaml
+summary: 车窗半开、音量 35，“有点吵”先关窗，“还是吵”再调小音量，最后关音乐
+behaviors:
+- '#1 听懂感受，结合车况推断'
+case_id: multi-demo3-noisy
+profile: null
+init:
+  speed_kmh: '70'
+  gear: D
+  windows.主驾: '50'
+  windows.副驾: '50'
+  media.volume: '35'
+  media.title: 晴天
+  media.artist: 周杰伦
+  media.playing: 开
+turns:
+- seat: 主驾
+  text: 有点吵
+  note: 车窗开着 → 关窗，并说“车窗开着，先帮你关上了”
+- seat: 主驾
+  text: 还是吵
+  note: 车窗都关了 → 调小音量
+- seat: 主驾
+  text: 算了把音乐关了吧
+  note: 暂停或关闭音乐

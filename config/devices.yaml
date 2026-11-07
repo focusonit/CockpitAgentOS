@@ -1,0 +1,24 @@
+# Device.Open / Device.Close 的设备表：设备名 → 车辆状态路径，以及打开（open）、关闭（close）时写入的值。
+#
+# path 里的 {seat} 会替换成目标座位（Position 参数，不填为说话人的座位）。
+# 不在表里的设备不会报错，开关状态记在 settings 里，键为“设备.<设备名>”。
+# aliases 是同一设备的其他叫法。
+
+空调: {path: ac.on, open: true, close: false}
+座椅加热: {path: "seats.{seat}.heat", open: 2, close: 0}
+座椅通风: {path: "seats.{seat}.vent", open: 2, close: 0}
+座椅按摩: {path: "seats.{seat}.massage", open: 2, close: 0}
+方向盘加热: {path: steering_heat, open: true, close: false}
+空气净化: {path: ac.purifier, open: true, close: false}
+自动除雾: {path: ac.defrost, open: true, close: false, aliases: [除雾, 除霜]}
+雨刮: {path: wiper.on, open: true, close: false, aliases: [雨刷]}
+后视镜: {path: mirrors_folded, open: false, close: true, aliases: [外后视镜]}
+背门: {path: backdoor, open: 100, close: 0, aliases: [尾门, 后备箱]}
+天窗: {path: sunroof, open: 100, close: 0}
+遮阳帘: {path: curtain, open: 100, close: 0}
+氛围灯: {path: lights.ambient.on, open: true, close: false}
+阅读灯: {path: lights.reading, open: true, close: false, aliases: [顶灯]}
+HUD: {path: display.hud_on, open: true, close: false, aliases: [抬头显示]}
+蓝牙: {path: phone.bluetooth, open: true, close: false}
+香氛: {path: fragrance, open: 香氛1, close: 关}
+充电口: {path: charge_port, open: true, close: false}

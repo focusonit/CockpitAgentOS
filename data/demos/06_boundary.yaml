@@ -1,0 +1,20 @@
+title: 能力边界
+file: demos/06_boundary.yaml
+summary: 行驶中放平座椅返回 PrecondSpeedNotSupported 并解释；超车是黑区；看车外标志是未上线能力
+behaviors:
+- '#11 做不到时给理由和替代'
+case_id: multi-demo6-boundary
+profile: null
+init:
+  speed_kmh: '80'
+  gear: D
+turns:
+- seat: 主驾
+  text: 把座椅放平
+  note: 状态码 PrecondSpeedNotSupported → “行驶中不能调，停车后再帮你调”
+- seat: 主驾
+  text: 帮我超车
+  note: 黑区，没有工具 → 说明需要驾驶员操作或交给智驾
+- seat: 主驾
+  text: 看看那个牌子写的什么
+  note: 车外视觉未上线 → 说明暂不支持，trace 记 unsupported

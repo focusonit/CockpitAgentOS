@@ -1,0 +1,869 @@
+# 长尾指令（车控 + App）：由 backend/protocol/gen_longtail.py 从测试场景生成，不要手改。
+# 要给某条指令加专门的状态和约束，把它挪到 core.yaml 并写处理函数。
+# 参数一律按自由文本处理；examples 是场景里出现过的取值。
+
+tools:
+  ai_creation:
+    commands:
+      BigModule.CloseChat: {}
+      BigModule.Draw: {}
+      BigModule.OpenChat: {}
+      PaintWallpapers.LiveCreate: {}
+      PaintWallpapers.Set: {}
+      PictureBook.Creat: {}
+      ScreenTheme.Creat: {}
+  body:
+    commands:
+      CarCtrl.AdjustElectricWing: {}
+      CarCtrl.CloseAutoAdjust: {}
+      CarCtrl.CloseCarPlay: {}
+      CarCtrl.CloseDynamicGesture: {}
+      CarCtrl.CloseGesture: {}
+      CarCtrl.CloseHUDLyrics: {}
+      CarCtrl.ClosePointDevice: {}
+      CarCtrl.CloseRearviewMirrorSightAdjust: {}
+      CarCtrl.CloseStaticGesture: {}
+      CarCtrl.ElectronicExteriorMirrorReset: {}
+      CarCtrl.HighSpeedFieldOfViewSpeedThreshold:
+        params:
+          Number:
+            type: str
+            examples:
+            - '60'
+      CarCtrl.OpenAutoAdjust: {}
+      CarCtrl.OpenCarPlay: {}
+      CarCtrl.OpenDynamicGesture: {}
+      CarCtrl.OpenFlashingAndWhistle: {}
+      CarCtrl.OpenGesture:
+        params:
+          Function:
+            type: str
+            examples:
+            - 手势
+      CarCtrl.OpenHUDLyrics: {}
+      CarCtrl.OpenPointDevice: {}
+      CarCtrl.OpenRearviewMirrorSightAdjust: {}
+      CarCtrl.OpenStaticGesture: {}
+      CarCtrl.SetCtrlUnlockMode: {}
+      CarCtrl.SetCustomerScreenMode:
+        params:
+          Name:
+            type: str
+            examples:
+            - 副驾驶面板显示模式
+      CarCtrl.SetWheelCustomizeKey:
+        params:
+          Function:
+            type: str
+            examples:
+            - 车外拍照
+      CarCtrl.SwitchElectricWingMode: {}
+      Smoking.Open: {}
+      WindowCtrl.CloseFourWindowsWelcomeGuests: {}
+      WindowCtrl.OpenFourWindowsWelcomeGuests: {}
+      WiperCtrl.SetWiperClearance: {}
+      WiperCtrl.SetWiperSensitivity: {}
+  climate:
+    commands:
+      ACCtrl.PreBook: {}
+  drive_energy:
+    commands:
+      CarCtrl.CloseAllTerrainMode: {}
+      CarCtrl.CloseChargerAutomaticUnlocking: {}
+      CarCtrl.CloseDriverTriggersLaneChange: {}
+      CarCtrl.CloseEnergyModeMemory: {}
+      CarCtrl.CloseIACCVoicePrompts: {}
+      CarCtrl.ClosePrimeMover: {}
+      CarCtrl.ClosePulseHeating: {}
+      CarCtrl.CloseSmartSceneMode: {}
+      CarCtrl.CloseSuspension: {}
+      CarCtrl.NextDriveMode: {}
+      CarCtrl.OpenChargerAutomaticUnlocking: {}
+      CarCtrl.OpenDriverTriggersLaneChange: {}
+      CarCtrl.OpenEnergyModeMemory: {}
+      CarCtrl.OpenIACCVoicePrompts: {}
+      CarCtrl.OpenKeySelfLearning: {}
+      CarCtrl.OpenPulseHeating: {}
+      CarCtrl.OpenSuspension: {}
+      CarCtrl.PreBookBatteryHeating: {}
+      CarCtrl.PreBookCharging: {}
+      CarCtrl.SetAccelerateMode: {}
+      CarCtrl.SetBrakeBoosterMode: {}
+      CarCtrl.SetChargeTime: {}
+      CarCtrl.SetChargingCurrentLimit:
+        params:
+          Number:
+            type: str
+            examples:
+            - '8'
+      CarCtrl.SetDeviationValueMode: {}
+      CarCtrl.SetDriveStyle: {}
+      CarCtrl.SetDrivingPower:
+        params:
+          Number:
+            type: str
+            examples:
+            - '50'
+      CarCtrl.SetEnergyCountMethod: {}
+      CarCtrl.SetEnergyDisplay: {}
+      CarCtrl.SetEnergyMode: {}
+      CarCtrl.SetFrontCrashAlert: {}
+      CarCtrl.SetGlidingEnergy: {}
+      CarCtrl.SetLaneDepartureAssistSensitivity: {}
+      CarCtrl.SetLaneDeparturePrice:
+        params:
+          Number:
+            type: str
+            examples:
+            - '10'
+      CarCtrl.SetMergeAssist: {}
+      CarCtrl.SetMergeAssistTips: {}
+      CarCtrl.SetMergeAssistWarning: {}
+      CarCtrl.SetOpeningDoorAlert: {}
+      CarCtrl.SetPowerRetentionValue:
+        params:
+          Number:
+            type: str
+            examples:
+            - '20'
+      CarCtrl.SetPowerStyle: {}
+      CarCtrl.SetPrimeMover: {}
+      CarCtrl.SetReverseHorizontalAssist: {}
+      CarCtrl.SetSentinelMode: {}
+      CarCtrl.SetSmartDriveStyle: {}
+      CarCtrl.SetSmartSceneMode: {}
+      CarCtrl.SetSmartSpeedLimit: {}
+      CarCtrl.SetSpeedLimit: {}
+      CarCtrl.SetWarningMode: {}
+      DrivePreference.SetMode: {}
+      RecorderControl.Close: {}
+      RecorderControl.Set: {}
+      RecorderControl.TurnOffRecording: {}
+      RecorderControl.ViewAlbum: {}
+      SteeringWheel.SetMode: {}
+  lighting:
+    commands:
+      AtlightsCtrl.CloseMode: {}
+      AtlightsCtrl.NextColor: {}
+      AtlightsCtrl.SetChildMode:
+        params:
+          ChildMode:
+            type: str
+            examples:
+            - 左流水
+      AtlightsCtrl.SetDrivingLinkageMode: {}
+      AtlightsCtrl.SetMode: {}
+      AtlightsCtrl.SetMoveWithMusicMode: {}
+      AtlightsCtrl.SyncColor: {}
+      CarCtrl.CloseCPillarRingLight: {}
+      CarCtrl.OpenCPillarRingLight: {}
+      CarCtrl.SetCPillarRingLight: {}
+      CarCtrl.SetCourtesyLamp: {}
+      CarCtrl.SetDoorknobLamp: {}
+      CarCtrl.SetHeadlampAnimation: {}
+      CarCtrl.SetRearviewMirrorLight:
+        params:
+          Number:
+            type: str
+            examples:
+            - '10'
+      HardButtonCtrl.SetBackgroundLight:
+        params:
+          Number:
+            type: str
+            examples:
+            - '2'
+      LampCard.Close: {}
+      LampCard.Disco: {}
+      LampCard.Open: {}
+      LampCard.Projection:
+        params:
+          Name:
+            type: str
+            examples:
+            - 我要加油
+      LampCard.SetMode: {}
+      LampCard.SetPostion:
+        params:
+          Position:
+            type: str
+            examples:
+            - 墙上
+      LampCard.SwitchPostion: {}
+  media_control:
+    commands:
+      GlobalCtrl.CloseFavoriteList: {}
+      GlobalCtrl.ClosePlayHistory: {}
+      GlobalCtrl.ClosePlayList: {}
+      GlobalCtrl.HighDefinition: {}
+      GlobalCtrl.InsidePlay: {}
+      GlobalCtrl.LowDefinition: {}
+      GlobalCtrl.MultipeSpeed: {}
+      GlobalCtrl.OpenPlayHistory: {}
+      GlobalCtrl.OpenPlayList: {}
+      GlobalCtrl.OutsidePlay: {}
+      GlobalCtrl.PlayByTimePoint: {}
+      GlobalCtrl.PlayHistory: {}
+      GlobalCtrl.Replay: {}
+  media_play:
+    commands:
+      AIPodcast.Play:
+        params:
+          App:
+            type: str
+            examples:
+            - AI播客
+      DouYin.Close:
+        params:
+          Hotword:
+            type: str
+            examples:
+            - 关闭
+      DouYin.Pause:
+        params:
+          Hotword:
+            type: str
+            examples:
+            - 暂停
+      FM.Open: {}
+      FM.PlayChannel:
+        params:
+          Radio:
+            type: str
+            examples:
+            - 中国之声
+      FM.PlayFavorite: {}
+      FM.PlayStation: {}
+      FM.SearchStation: {}
+      KTV.OpenClickedSong: {}
+      KTV.Play: {}
+      KTV.PlayOriginal: {}
+      KTV.PlayVocal: {}
+      KTV.SingAgain: {}
+      KTV.SkipPrelude: {}
+      Music.AddPlayList: {}
+      Music.CloseAccompaniment: {}
+      Music.CloseSmartAccompany: {}
+      Music.DeletePlayList: {}
+      Music.ExitSingAndListen: {}
+      Music.OpenAccompaniment: {}
+      Music.OpenSmartAccompany: {}
+      Music.OpenSongList: {}
+      Music.PlaySongList: {}
+      Music.SingAndListen: {}
+      Podcast.Close: {}
+      Podcast.Open: {}
+      Podcast.PlayFavorite: {}
+      Video.AddFavorite: {}
+      Video.AggregatePlay: {}
+      Video.CancelFavorite: {}
+      Video.Close: {}
+      Video.ExitFullScreen: {}
+      Video.Open: {}
+      Video.SwitchChannels: {}
+      Video.SwitchDefinition: {}
+  mini_program:
+    commands:
+      MiniProgram.GetNumber: {}
+      MiniProgram.OpenPage: {}
+      MiniProgram.QueryTicket: {}
+      MiniProgram.QueueTicket: {}
+  nav_query:
+    commands:
+      Navigation.AlongSearch: {}
+  navigation:
+    commands:
+      Navigation.AddFavorite: {}
+      Navigation.AddFavoriteByName: {}
+      Navigation.AddFavoriteForCurrentPosition: {}
+      Navigation.AddWaypoints: {}
+      Navigation.AskNextRoadName: {}
+      Navigation.AskRoadAhead: {}
+      Navigation.AskSpeedLimit: {}
+      Navigation.BombardFrontCar: {}
+      Navigation.CancelFavorite:
+        params:
+          Address:
+            type: str
+            examples:
+            - 中关村
+            - 家
+            - 公司
+      Navigation.ChangeNavi3DTheme: {}
+      Navigation.ChangeToTurtle: {}
+      Navigation.ChooseRoute: {}
+      Navigation.CloseCruiseBroadcast: {}
+      Navigation.CloseFullMap: {}
+      Navigation.CloseInstrumentPanelFullMap: {}
+      Navigation.CloseMapCollect: {}
+      Navigation.CloseOverview: {}
+      Navigation.CloseTanLu: {}
+      Navigation.CloseTrafficReport: {}
+      Navigation.ConcisionBroadcast: {}
+      Navigation.DeleteMeetingPoint: {}
+      Navigation.DeleteWaypoints: {}
+      Navigation.DeleteWaypointsByName: {}
+      Navigation.DetailBroadcast: {}
+      Navigation.GoHere: {}
+      Navigation.IntelligentBroadcast: {}
+      Navigation.MemoryNavigation: {}
+      Navigation.Open: {}
+      Navigation.OpenCruiseBroadcast: {}
+      Navigation.OpenEagleEye: {}
+      Navigation.OpenFullMap: {}
+      Navigation.OpenHistogramView: {}
+      Navigation.OpenInstrumentPanelFullMap: {}
+      Navigation.OpenMapCollect: {}
+      Navigation.OpenTrafficReport: {}
+      Navigation.QueryDestinationInfo: {}
+      Navigation.QueryTrafficInfo: {}
+      Navigation.RefreshRoute: {}
+      Navigation.RepeatBroadcast: {}
+      Navigation.ResetPoi: {}
+      Navigation.Restart: {}
+      Navigation.SearchAround.Collection:
+        params:
+          Landmark:
+            type: str
+            examples:
+            - 家
+            - 公司
+      Navigation.SearchParkingLots: {}
+      Navigation.SelfPositioning: {}
+      Navigation.SetMapMode:
+        params:
+          MapOrientation:
+            type: str
+            examples:
+            - 车头向上
+          ViewMode:
+            type: str
+            examples:
+            - 3D
+      Navigation.SetMeetingPoint: {}
+      Navigation.StartNavi: {}
+      Navigation.StartTanLu: {}
+      Navigation.SuperConcisionBroadcast: {}
+      Navigation.SwitchRoute: {}
+      Navigation.SwitchToNavigation: {}
+      Navigation.ToTeamDestination: {}
+      Navigation.setMemoryPoi: {}
+      Parking.FilterLotAndParkingSpot: {}
+      Parking.FilterParkingSpot: {}
+  open_page:
+    commands:
+      GlobalCtrl.Delete: {}
+      PageCtrl.CloseACSettings: {}
+      PageCtrl.CloseAssistantCustom: {}
+      PageCtrl.CloseBeatUpDudu: {}
+      PageCtrl.CloseFragranceSettings: {}
+      PageCtrl.CloseInternalControlCar: {}
+      PageCtrl.CloseLampLanguageCard: {}
+      PageCtrl.CloseMazdaGPT: {}
+      PageCtrl.CloseRearviewMirror: {}
+      PageCtrl.CloseStarAndYou: {}
+      PageCtrl.CloseStarDebris: {}
+      PageCtrl.CloseStarMagic: {}
+      PageCtrl.CloseStarRecord: {}
+      PageCtrl.CloseStarRoom: {}
+      PageCtrl.CloseStarXiaoAn: {}
+      PageCtrl.CloseSuperbrainWorld: {}
+      PageCtrl.CloseVehicleCenterPage:
+        params:
+          PageName:
+            type: str
+            examples:
+            - 驾驶
+      PageCtrl.CloseVoiceSetting: {}
+      PageCtrl.OpenAllTerrain: {}
+      PageCtrl.OpenAuthorizationManagement: {}
+      PageCtrl.OpenBeatUpDudu: {}
+      PageCtrl.OpenBlueLightPage: {}
+      PageCtrl.OpenChargeDischargeSetInterface: {}
+      PageCtrl.OpenDLPPage:
+        params:
+          Name:
+            type: str
+            examples:
+            - 写画DIY
+      PageCtrl.OpenDeepalShow: {}
+      PageCtrl.OpenDelayedShootingPage: {}
+      PageCtrl.OpenDeviceInformation: {}
+      PageCtrl.OpenDrawPicture: {}
+      PageCtrl.OpenEnergyConsumptionCurve: {}
+      PageCtrl.OpenEnergyFlow: {}
+      PageCtrl.OpenFragranceSettings: {}
+      PageCtrl.OpenGestureLearning: {}
+      PageCtrl.OpenGesturePage: {}
+      PageCtrl.OpenGestureSetting: {}
+      PageCtrl.OpenInputVoiceprint: {}
+      PageCtrl.OpenInternalControlCar: {}
+      PageCtrl.OpenLampLanguageCard: {}
+      PageCtrl.OpenLogUploadPage: {}
+      PageCtrl.OpenMaintenanceRecord: {}
+      PageCtrl.OpenMazdaGPT: {}
+      PageCtrl.OpenMonthlyReport: {}
+      PageCtrl.OpenPrivacyAgreement: {}
+      PageCtrl.OpenRearviewMirror: {}
+      PageCtrl.OpenScheduleCharging: {}
+      PageCtrl.OpenStarAndYou: {}
+      PageCtrl.OpenStarDebris: {}
+      PageCtrl.OpenStarMagic: {}
+      PageCtrl.OpenStarRecord: {}
+      PageCtrl.OpenStarRoom: {}
+      PageCtrl.OpenStarXiaoAn: {}
+      PageCtrl.OpenSteeringWheelSettings: {}
+      PageCtrl.OpenSuperbrainWorld: {}
+      PageCtrl.OpenSuspensionComfort: {}
+      PageCtrl.OpenSystemUpgrade: {}
+      PageCtrl.OpenTrip: {}
+      PageCtrl.OpenVehicleCenterPage:
+        params:
+          PageName:
+            type: str
+            examples:
+            - 驾驶
+      PageCtrl.OpenVoiceSetting: {}
+      PageCtrl.OpenWallpaperPage: {}
+      PageCtrl.OpenWeChatLink: {}
+      PageCtrl.RemoveVoiceprint: {}
+  phone:
+    commands:
+      PhoneCall.CallBack: {}
+      PhoneCall.CancelDial: {}
+      PhoneCall.Dial: {}
+      PhoneCall.OpenAddressBook: {}
+      PhoneCall.QueryNumber: {}
+  system_apps:
+    commands:
+      AISceneMode.CloseChildFullScreen: {}
+      AISceneMode.CloseChildRealVideo: {}
+      AISceneMode.OpenChildFullScreen: {}
+      AISceneMode.OpenChildRealVideo: {}
+      Assistant.Custom: {}
+      Assistant.SetCustomSpeaker: {}
+      Assistant.VoiceCustomization: {}
+      BeginnerMode.Open: {}
+      Browser.Back: {}
+      Browser.Collect: {}
+      Browser.Forward: {}
+      Browser.HomePage: {}
+      Browser.OpenSetting: {}
+      Browser.Refresh: {}
+      ChildMode.Close: {}
+      ConnectGenies.Close: {}
+      ConnectGenies.Open: {}
+      CustomScene.Create: {}
+      CustomScene.Open: {}
+      DeepalIN.Close: {}
+      DeepalIN.Open: {}
+      DeskRobotMode.Set: {}
+      GeneralFunctionCtrl.Close: {}
+      GeneralFunctionCtrl.Open: {}
+      Help.Cando: {}
+      Help.ElectronicPause: {}
+      Help.ElectronicPlay: {}
+      Help.FullScreen: {}
+      Help.HalfScreen: {}
+      Help.LaunchOpen: {}
+      LightSound.Close: {}
+      LightSound.Open: {}
+      LogCtrl.Upload: {}
+      Memory.Close: {}
+      Memory.Manage: {}
+      Memory.Register: {}
+      PersonalCenter.Close: {}
+      PersonalCenter.EnquirePersonalName: {}
+      PersonalCenter.FaceRegistration:
+        params:
+          Position:
+            type: str
+            examples:
+            - 主驾
+      PersonalCenter.Open: {}
+      PhoneLink.Back: {}
+      PhoneLink.Close: {}
+      PhoneLink.CloseAllApp: {}
+      PhoneLink.CloseApp: {}
+      PhoneLink.CloseCarLink: {}
+      PhoneLink.CloseHiCar: {}
+      PhoneLink.CloseHonorLink: {}
+      PhoneLink.Fullscreen: {}
+      PhoneLink.Home: {}
+      PhoneLink.Music: {}
+      PhoneLink.Navigation: {}
+      PhoneLink.Open: {}
+      PhoneLink.OpenApp: {}
+      PhoneLink.OpenCarLink: {}
+      PhoneLink.OpenHonorLink: {}
+      PhoneLink.OpenPage: {}
+      PhoneLink.Schedule.Create: {}
+      PhoneLink.Schedule.Query: {}
+      PhoneLink.ScreenNavigation: {}
+      PhoneLink.SmallWindow: {}
+      PhoneLink.Video: {}
+      RecommendationCenter.Close: {}
+      RecommendationCenter.Open: {}
+      SceneMode.Close: {}
+      SceneMode.Open: {}
+      SceneMode.OpenRestModeAlarm: {}
+      SkillAquare.Close: {}
+      SkillAquare.CloseSkill: {}
+      SkillAquare.Open: {}
+      SkillAquare.OpenSkill:
+        params:
+          Name:
+            type: str
+            examples:
+            - 驾驶安全
+      SkillCenter.Close: {}
+      SkillCenter.Open: {}
+      SoundPlus.Close: {}
+      SoundPlus.CloseAIAtmosSwitch: {}
+      SoundPlus.Open: {}
+      SoundPlus.OpenAIAtmosSwitch: {}
+      SoundPlus.PlayDemoVideo:
+        params:
+          Atmos:
+            type: str
+            examples:
+            - 杜比全景声
+      SoundPlus.SwitchTab:
+        params:
+          Page:
+            type: str
+            examples:
+            - 杜比全景声
+      SoundPlus.SwitchVideo:
+        params:
+          Atmos:
+            type: str
+            examples:
+            - 杜比全景声
+      SwitchCameraControl.Set: {}
+      TakePhoto.AnglePhotography: {}
+      TakePhoto.ClonePanoramaPhotography: {}
+      TakePhoto.EndDelayedShooting: {}
+      TakePhoto.ExitGuardMode: {}
+      TakePhoto.OpenDelayedShooting: {}
+      TakePhoto.OpenPanoramaPhotography: {}
+      TakePhoto.PanoramaPhotography: {}
+      TakePhoto.Photo.Close: {}
+      TakePhoto.Photo.Open: {}
+      TakePhoto.RotatePhotography: {}
+      TakePhoto.ScanCode: {}
+      TakePhoto.SelfPortrait.Open: {}
+      TakePhoto.SetDelayedShootingMode: {}
+      TakePhoto.SetDelayedShootingTime: {}
+      TakePhoto.SetGuardMode: {}
+      TakePhoto.ShootVlog: {}
+      TakePhoto.StartDelayedShooting: {}
+      TakePhoto.Video.Cancel: {}
+      TakePhoto.Video.Close: {}
+      TakePhoto.Video.Open: {}
+      TakePhoto.Video.Pause: {}
+      TakePhoto.Video.Start: {}
+      TakePhoto.Video.Stop: {}
+      TongLink.Close: {}
+      TongLink.Open: {}
+      WeChatAssistant.ItinerarySynchronization: {}
+      WeChatAssistant.PrepareCar: {}
+      WeChatAssistant.VehicleConditionInquiry: {}
+      funbox.Close: {}
+      funbox.Open: {}
+  system_settings:
+    commands:
+      Acoustics.Close: {}
+      Acoustics.Open: {}
+      Acoustics.Replace: {}
+      BlueToothCtrl.CloseAddressBookSwitch: {}
+      BlueToothCtrl.CloseIncomingCallBroadcast: {}
+      BlueToothCtrl.CloseRealTimeInformation: {}
+      BlueToothCtrl.OpenAddressBookSwitch: {}
+      BlueToothCtrl.OpenIncomingCallBroadcast: {}
+      BlueToothCtrl.OpenRealTimeInformation: {}
+      BlueToothCtrl.RefreshBluetoothList: {}
+      CarInfo.QueryMobileData: {}
+      CarInfo.QueryMobileDetailData: {}
+      CarInfo.QuerySystemMemoryStatus: {}
+      CarInfo.QuerySystemStorageSpace: {}
+      DashboardCtrl.ScreenShot: {}
+      DashboardCtrl.SetLight: {}
+      HudCtrl.CloseSnowfieldMode: {}
+      HudCtrl.OpenSnowfieldMode: {}
+      HudCtrl.SetDirection: {}
+      HudCtrl.SetDisplayMode: {}
+      HudCtrl.SetMode: {}
+      Interface.Close: {}
+      Interface.Open: {}
+      Launcher.CloseScreenCleaning: {}
+      Launcher.OpenScreenCleaning: {}
+      PromptLow.Close: {}
+      PromptLow.Open: {}
+      PromptLow.Replace: {}
+      ScreenCtrl.AllowBrightness: {}
+      ScreenCtrl.Lock: {}
+      ScreenCtrl.ProhibitBrightness: {}
+      ScreenCtrl.SetBlueLightFilter:
+        params:
+          Number:
+            type: str
+            examples:
+            - '100'
+      ScreenCtrl.SetColorTemperature:
+        params:
+          Number:
+            type: str
+            examples:
+            - '10'
+      ScreenCtrl.SetDesktopDisplay:
+        params:
+          name:
+            type: str
+            examples:
+            - 壁纸
+      ScreenCtrl.SetRotating: {}
+      ScreenCtrl.SetScreenMode: {}
+      ScreenCtrl.SetStandbyEffect: {}
+      ScreenCtrl.SetThemeMode: {}
+      ScreenCtrl.SwitchTheme: {}
+      ScreenCtrl.SwitchWallpaper: {}
+      ScreenCtrl.Unlock: {}
+      ScreenLayout.Creat: {}
+      SoundCtrl.CloseChargingBroadcastSound: {}
+      SoundCtrl.CloseShiftSound: {}
+      SoundCtrl.OpenChargingBroadcastSound: {}
+      SoundCtrl.OpenShiftSound: {}
+      SoundCtrl.SetChargingBroadcastSound: {}
+      SoundCtrl.SetEVSound: {}
+      SoundCtrl.SetHeadrestLoudspeakerMode: {}
+      SoundCtrl.SetLockedSucceedTips: {}
+      SoundCtrl.SetSpeedAdjustment: {}
+      SoundCtrl.SetTouchPromptSound: {}
+      SoundCtrl.SetVehiclePromptSound: {}
+      SoundCtrl.SwitchVehiclePromptSound: {}
+      SoundCtrl.SwitchVoiceAssistantAvatar: {}
+      SoundCtrl.SwitchWarningSound: {}
+      SoundEffectMode.Close: {}
+      SoundEffectMode.Set: {}
+      SoundEffects.ChangeSoundMode: {}
+      SoundEffects.CloseEqualizer: {}
+      SoundEffects.Equalizer: {}
+      SoundEffects.Open: {}
+      SoundEffects.SwitchSystemSoundEffect: {}
+      SpeedSound.Cancel: {}
+      SpeedSound.ChangeTheme: {}
+      SystemCtrl.OptimizeMemory: {}
+      SystemCtrl.RefreshNetworkList: {}
+      SystemCtrl.SetSystemLanguage:
+        params:
+          Language:
+            type: str
+            examples:
+            - 中文
+      SystemCtrl.SetTimeZone: {}
+      SystemCtrl.SetWelcomePage: {}
+      SystemCtrl.UnbindWeChat: {}
+      TransForm.Theme: {}
+      Tuner.EqualizerAdjustment: {}
+      Tuner.SoundstageAdjustment: {}
+      Tuner.SwitchCustomSoundEffects: {}
+      VoiceAssistant.CancelSoundFieldMode: {}
+      VoiceAssistant.CloseAllTimeFreeWakeup: {}
+      VoiceAssistant.CloseChildrenPermissions: {}
+      VoiceAssistant.CloseControlPointDirection: {}
+      VoiceAssistant.CloseFreeWakeupViewCmd: {}
+      VoiceAssistant.CloseMultiplePeopleTalking: {}
+      VoiceAssistant.CloseOutCarConversation: {}
+      VoiceAssistant.CloseOutCarInteraction: {}
+      VoiceAssistant.CloseQuickFreeWakeup: {}
+      VoiceAssistant.CloseSoundEffectMode: {}
+      VoiceAssistant.CloseVagueAnaphora: {}
+      VoiceAssistant.CloseVoiceWakeup: {}
+      VoiceAssistant.CloseVoiceprintRecognition: {}
+      VoiceAssistant.OpenAllTimeFreeWakeup: {}
+      VoiceAssistant.OpenChildrenPermissions: {}
+      VoiceAssistant.OpenControlPointDirection: {}
+      VoiceAssistant.OpenFreeWakeupViewCmd: {}
+      VoiceAssistant.OpenMultiplePeopleTalking: {}
+      VoiceAssistant.OpenOutCarConversation: {}
+      VoiceAssistant.OpenOutCarInteraction: {}
+      VoiceAssistant.OpenQuickFreeWakeup: {}
+      VoiceAssistant.OpenSoundEffectMode: {}
+      VoiceAssistant.OpenVagueAnaphora: {}
+      VoiceAssistant.OpenVoiceWakeup: {}
+      VoiceAssistant.OpenVoiceprintRecognition: {}
+      VoiceAssistant.ReVoicePrintName: {}
+      VoiceAssistant.RecoverSoundFieldMode: {}
+      VoiceAssistant.Rename: {}
+      VoiceAssistant.SetConversationDuration: {}
+      VoiceAssistant.SetLanguage:
+        params:
+          Language:
+            type: str
+            examples:
+            - 四川话
+      VoiceAssistant.SetOnlySoundFieldMode: {}
+      VoiceAssistant.SetSoundEffectMode: {}
+      VoiceAssistant.SetSoundFieldMode: {}
+      VoiceAssistant.SwitchSoundEffectMode: {}
+      VoiceAssistant.SwitchTimbre:
+        params:
+          Position:
+            type: str
+            examples:
+            - 车外
+  vehicle_query:
+    commands:
+      CarInfo.HoodStatus: {}
+      CarInfo.LampStatus:
+        params:
+          Device:
+            type: str
+            examples:
+            - 车灯
+      CarInfo.QueryAverageOilConsumption: {}
+      CarInfo.QueryChargingCycleItinerary: {}
+      CarInfo.QueryCurrentItinerary: {}
+      CarInfo.QueryElectricityConsumption: {}
+      CarInfo.QueryLongTermItinerary: {}
+      CarInfo.UnlockingStatus: {}
+device_names:
+- AI画质增强
+- HUD亮度自动调节
+- HUD高度自动调节
+- 下雨自动关窗
+- 交通灯辅助
+- 仅电子眼路段
+- 代客泊车权限
+- 仪表全屏导航常显
+- 位置灯
+- 侧面声音报警
+- 保存驾驶偏好
+- 保留怠速启停偏好
+- 倒车时媒体音量降低
+- 倒车横向辅助
+- 倒车横向预警
+- 倒车视野放大
+- 儿童锁
+- 充电自动开启哨兵模式
+- 光之翼
+- 分心提醒
+- 前方横向预警
+- 前灯迎送宾动画
+- 前照灯延时
+- 前碰撞预警
+- 前贯穿灯常亮
+- 副驾驶面板显示模式
+- 发动机运行模式
+- 变道盲区显示
+- 后排安全带未系提醒
+- 后方视野辅助
+- 后视镜加热
+- 后追尾预警
+- 后追尾预警影像
+- 后雨刮洗涤模式
+- 壁纸轮播
+- 外后视镜倒车辅助
+- 外后视镜自动折叠
+- 大灯自适应
+- 天幕
+- 实体按键背景光
+- 对外放电
+- 导航时媒体音量降低
+- 尾翼升降迎宾
+- 并线辅助
+- 应急灯
+- 座椅礼让
+- 座椅舒适进出
+- 座舱新风系统
+- 开门预警
+- 开门预警语音提示
+- 徽标灯
+- 怠速启停
+- 感应解闭锁
+- 感应迎宾灯
+- 手机遗落提醒
+- 投射大灯双闪加强
+- 投射大灯智能环境光感应
+- 投射大灯泊车提示
+- 投射大灯示宽提示
+- 投射大灯转向提示
+- 投射大灯辅助驾驶信息提示
+- 投射大灯迎送宾灯效
+- 投射大灯远光灯增强
+- 护眼模式
+- 换道辅助
+- 排气声浪
+- 摄像头
+- 数字飞翼
+- 旋转屏智能模式
+- 无线充电
+- 无线网络
+- 日间行车灯
+- 智慧寻车
+- 智能泊车权限
+- 智能载体
+- 智能远光灯
+- 智能限速
+- 氛围灯分区调节
+- 氛围灯同步调节
+- 氛围灯行车联动
+- 氛围灯语音随动
+- 氛围灯迎宾模式
+- 油箱盖
+- 泊车新手引导
+- 热点
+- 电动尾翼
+- 电池预热
+- 画质增强
+- 疲劳提醒
+- 省电模式
+- 离车自动闭锁
+- 空气净化语音提示
+- 空调自干燥
+- 红灯提醒
+- 背门感应
+- 背门锁
+- 自动亮度调节
+- 自动大灯
+- 自动空气净化
+- 自动驻车
+- 舒适停车
+- 舒适制动
+- 营地照明灯
+- 蓝鲸数智增程
+- 行车自动闭锁
+- 行车陪练助手
+- 视感背门
+- 解锁自动换气
+- 解锁降窗通风
+- 触摸提示音
+- 超级省电模式
+- 超速预警
+- 车外低速提示音
+- 车窗锁
+- 车道偏离辅助
+- 转向灯
+- 转向视野放大
+- 迎送宾动画灯光
+- 迎送宾灯
+- 近车自动解锁
+- 远光灯
+- 钥匙关闭背门
+- 长时手动模式
+- 闭锁成功提示音
+- 闭锁自动升窗
+- 闭锁音
+- 雨刮维修模式
+- 雾灯
+- 音量随速调节
+- 顶灯自动点亮
+- 预约充电
+- 预约充电加热
+- 香氛灯
+- 驻车自动解锁
+- 驾驶模式与转向联动
+- 驾驶模式记忆
+- 高速视野放大
+- 高阶智慧能量管理

@@ -1,0 +1,100 @@
+# 快速通道（开发计划 §4.3）：端侧正则规则，整句命中高频单意图指令时直接交给执行器，不上云；断网时只走这里。
+#
+# 匹配前先用 backend/edge/text.py 的 core() 去掉标点、句首“帮我/请/那”和句尾“吧/一下”，
+# 然后 pattern 必须整句匹配（re.fullmatch），所以“关闭空调关闭音乐”这类多意图句子不会命中，交给云端。
+#
+# pattern 里可以用词表占位符 @名字，展开成按长度降序的候选（已转义）：
+#   @open @close @pos 来自下面的 vocab；@device 是 devices.yaml 的设备名和别名 + 长尾设备名（去掉 exclude_devices）；
+#   @song @singer 来自 data/apps/music.json 的曲库。
+# 规则里的 exclude: {词表: [...]} 只对这条规则去掉某些词。
+# args 的值写 $组名 引用命名分组，分组没匹配到就不带这个参数；maps 把分组的取值改写成协议取值；
+# 名为 n 的分组按数字处理（支持一到十的汉字）。
+#
+# 改了规则要跑 backend/tests/test_m4.py：命中的评测用例必须全部满足用例期望。
+
+vocab:
+  open: [打开, 开启, 开一下, 打开一下, 开开, 启动]
+  close: [关闭, 关掉, 关上, 关了, 关一下, 关闭一下]
+  pos: [主驾驶, 主驾, 副驾驶, 副驾, 左后排, 右后排, 左后, 右后, 后排, 前排, 所有, 全部, 全车]
+
+# 这些设备名在用例里走的是专门的领域工具（例如天窗走 body 的 SkylightCtrl），快速通道不接
+# 除雾/除霜 两种说法在用例里分别走 climate 的除霜模式和 switch_device 的“自动除雾”，交给云端判断；
+# 变道盲区显示 的用例期望和原话对不上（“打开”期望 Close），不接
+exclude_devices: [天窗, 遮阳帘, 背门, 尾门, 后备箱, 后视镜, 外后视镜, 车窗, 香氛, 除雾, 除霜, 变道盲区显示]
+
+maps:
+  pos: {主驾驶: 主驾, 副驾驶: 副驾, 全部: 所有, 全车: 所有}
+
+rules:
+  - id: device_open
+    patterns: ["(?:@open)(?P<pos>@pos)?的?(?P<device>@device)", "(?P<pos>@pos)?的?(?P<device>@device)(?:@open)"]
+    tool: switch_device
+    command: Device.Open
+    args: {Device: $device, Position: $pos}
+  - id: device_close
+    patterns: ["(?:@close)(?P<pos>@pos)?的?(?P<device>@device)", "(?P<pos>@pos)?的?(?P<device>@device)(?:@close)"]
+    # 这几个提示音“打开”走 switch_device，“关闭”在用例里走 system_settings 的 SoundCtrl
+    exclude: {device: [音量随速调节, 触摸提示音, 闭锁成功提示音]}
+    tool: switch_device
+    command: Device.Close
+    args: {Device: $device, Position: $pos}
+
+  - id: temperature
+    patterns: ["(?:把)?(?P<pos>@pos)?的?(?:空调)?(?:温度)?(?:调到|调成|调至|设为|设置为|设到|设置到|开到)(?P<n>\\d{2})(?:度|摄氏度)"]
+    tool: climate
+    command: ACCtrl.SetTemperature
+    args: {Area: $pos, Number: $n}
+  - id: air_volume
+    patterns: ["(?:把)?(?:空调)?风量(?:调到|调成|调至|设为|设置为|设到|开到)(?P<n>[1-7一二三四五六七])档"]
+    tool: climate
+    command: ACCtrl.SetAirVolume
+    args: {Number: $n}
+
+  - id: window_open
+    patterns: ["(?:@open)(?P<pos>@pos)?的?车窗", "(?:把)?(?P<pos>@pos)?的?车窗(?:@open)"]
+    tool: body
+    command: WindowCtrl.Open
+    args: {Position: $pos}
+  - id: window_close
+    patterns: ["(?:@close)(?P<pos>@pos)?的?车窗", "(?:把)?(?P<pos>@pos)?的?车窗(?:@close)"]
+    tool: body
+    command: WindowCtrl.Close
+    args: {Position: $pos}
+
+  - id: play_singer_song
+    patterns: ["(?:播放|放|来|听|我想听|我要听)(?:一首|一下|首)?(?P<singer>@singer)的(?P<song>@song)"]
+    tool: media_play
+    command: Music.Play
+    args: {Singer: $singer, Song: $song}
+  - id: play_song
+    patterns: ["(?:播放|放|来|听|我想听|我要听)(?:一首|一下|首)?(?P<song>@song)(?:这首歌)?"]
+    tool: media_play
+    command: Music.Play
+    args: {Song: $song}
+  - id: play_singer
+    patterns: ["(?:播放|放|来|听|我想听|我要听)(?:点|一首|首)?(?P<singer>@singer)的(?:歌|音乐|歌曲)"]
+    tool: media_play
+    command: Music.Play
+    args: {Singer: $singer}
+  - id: play_local
+    patterns: ["(?:播放|放|打开|听|来)(?:点|一首)?本地(?:的)?(?:音乐|歌曲|歌)"]
+    tool: media_play
+    command: Music.Play
+    args: {Source: 本地}
+
+  - id: next
+    patterns: ["下一首|下一曲|下一首歌|换一首|换首歌|换一首歌|切歌"]
+    tool: media_control
+    command: GlobalCtrl.Next
+  - id: previous
+    patterns: ["上一首|上一曲|上一首歌"]
+    tool: media_control
+    command: GlobalCtrl.Previous
+  - id: pause
+    patterns: ["暂停|暂停播放|暂停音乐|音乐暂停"]
+    tool: media_control
+    command: GlobalCtrl.Pause
+  - id: resume
+    patterns: ["继续播放|接着放|恢复播放"]
+    tool: media_control
+    command: GlobalCtrl.Resume

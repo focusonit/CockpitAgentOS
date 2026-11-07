@@ -1,0 +1,21 @@
+title: 后排孩子
+file: demos/04_kids.yaml
+summary: 右后排说热只调右后排；主驾给后排放动画片；给孩子讲故事不调工具
+behaviors:
+- '#7 谁说的就调谁的'
+- '#12 自然闲聊不打断任务'
+case_id: multi-demo4-kids
+profile: null
+init:
+  ac.on: 开
+  cabin_temp: '27'
+turns:
+- seat: 右后排
+  text: 我有点热
+  note: 只调右后排温度（Area=右后排）
+- seat: 主驾
+  text: 给后排放个动画片
+  note: Video.Play，Position 后排屏或说明
+- seat: 主驾
+  text: 给孩子讲个恐龙的故事
+  note: 闲聊，直接讲，不调工具
